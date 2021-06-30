@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:mini_game/mini_game_page.dart';
-import 'package:mini_game/mini_game_model.dart';
 import 'package:provider/provider.dart';
 
+import 'package:mini_game/game/game.dart';
+import 'package:mini_game/simple_game.dart';
+import 'package:mini_game/scissor_stone_paper.dart';
+
 void main() {
-  var game = MiniGame();
+  // var gameEngine = SimpleGameEngine();
+  // var gameView = SimpleGameView('Simple Game Demo', gameEngine);
+  // var game = Game(gameEngine, gameView);
+
+  var gameEngine = ScissorStonePaperEngine();
+  var gameView = ScissorStonePaperView('Scissor Stone Paper', gameEngine);
+  var game = Game(gameEngine, gameView);
+
   runApp(MyApp(game));
 }
 
 class MyApp extends StatelessWidget {
-  final MiniGame game;
+  final Game game;
+
   MyApp(this.game);
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MiniGame>(
-      create: (_) => game,
-      child: MaterialApp(
-        title: 'Mini Game Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: MiniGamePagePage(),
-      )
-    );
+    return ChangeNotifierProvider<GameEngine>.value(
+        value: game.gameEngine,
+        child: MaterialApp(
+          title: game.gameView.title,
+          theme: ThemeData(
+            primarySwatch: Colors.yellow,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: game.gameView,
+        ));
   }
 }
