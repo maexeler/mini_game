@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mini_game/game/game.dart';
+import 'package:mini_game/move_test.dart';
 import 'package:mini_game/simple_game.dart';
 import 'package:mini_game/scissor_stone_paper.dart';
 
@@ -10,8 +11,12 @@ void main() {
   // var gameView = SimpleGameView('Simple Game Demo', gameEngine);
   // var game = Game(gameEngine, gameView);
 
-  var gameEngine = ScissorStonePaperEngine();
-  var gameView = ScissorStonePaperView('Scissor Stone Paper', gameEngine);
+  // var gameEngine = ScissorStonePaperEngine();
+  // var gameView = ScissorStonePaperView('Scissor Stone Paper', gameEngine);
+  // var game = Game(gameEngine, gameView);
+
+  var gameEngine = MoveGameEngine();
+  var gameView = MoveGameView('Simple Game Demo', gameEngine);
   var game = Game(gameEngine, gameView);
 
   runApp(MyApp(game));

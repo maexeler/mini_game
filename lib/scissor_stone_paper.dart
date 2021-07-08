@@ -7,8 +7,8 @@ enum Selection { scissor, stone, paper, noSelection }
 enum WinnState { userWins, userLosses, draw }
 
 class ScissorStonePaperEngine extends GameEngine {
-  Selection _userSelection;
-  Selection _gameSelection;
+  Selection _userSelection = Selection.noSelection;
+  Selection _gameSelection = Selection.noSelection;
 
   final List<Selection> _possibleSelections = [
     Selection.stone,
@@ -16,10 +16,10 @@ class ScissorStonePaperEngine extends GameEngine {
     Selection.scissor
   ];
   final int _animationSteps = 7;
-  int _maxAnimationStep, _actualAnimationStep;
+  int _maxAnimationStep = 0, _actualAnimationStep = 0;
   final Random rnd = Random();
 
-  WinnState _winnState;
+  WinnState _winnState = WinnState.draw;
 
   get winnState => _winnState;
 
@@ -136,17 +136,17 @@ class ScissorStonePaperView extends GameView {
           children: [
             SspWidget(
                 show: Selection.scissor,
-                onPressed: gameEngine._gameSelection == Selection.scissor
+                onPressed: gameEngine._gameSelection != Selection.scissor
                     ? null
                     : () {}),
             SspWidget(
                 show: Selection.stone,
-                onPressed: gameEngine._gameSelection == Selection.stone
+                onPressed: gameEngine._gameSelection != Selection.stone
                     ? null
                     : () {}),
             SspWidget(
                 show: Selection.paper,
-                onPressed: gameEngine._gameSelection == Selection.paper
+                onPressed: gameEngine._gameSelection != Selection.paper
                     ? null
                     : () {}),
           ],
@@ -169,16 +169,16 @@ class ScissorStonePaperView extends GameView {
           SspWidget(
               show: gameEngine.userSelection,
               onPressed:
-                  gameEngine.winnState == WinnState.userWins ? null : () {}),
+                  gameEngine.winnState != WinnState.userWins ? null : () {}),
           SspWidget(
               show: gameEngine.gameSelection,
               onPressed:
-                  gameEngine.winnState == WinnState.userLosses ? null : () {}),
+                  gameEngine.winnState != WinnState.userLosses ? null : () {}),
           Text('', textScaleFactor: 1.5),
           Text(message, textScaleFactor: 1.5),
           Text('', textScaleFactor: 1.5),
           Text('', textScaleFactor: 1.5),
-          RaisedButton(
+          ElevatedButton(
               child: Text('Play again', textScaleFactor: 1.5),
               onPressed: () {
                 gameEngine.state = GameState.waitForStart;
@@ -188,8 +188,8 @@ class ScissorStonePaperView extends GameView {
 }
 
 class SspWidget extends StatelessWidget {
-  final Selection show;
-  final Function onPressed;
+  final Selection? show;
+  final Function? onPressed;
 
   SspWidget({this.show, this.onPressed});
 
@@ -201,11 +201,12 @@ class SspWidget extends StatelessWidget {
             ? 'Paper'
             : show == Selection.scissor
                 ? 'Scissor'
-                : 'Uups?';
+                : 'Oops?';
     return Padding(
         padding: EdgeInsets.all(5.0),
-        child: RaisedButton(
+        child: ElevatedButton(
             child: Text('$message', textScaleFactor: 1.5),
-            onPressed: onPressed));
+            onPressed: onPressed == null ? null : ()=>{ onPressed!() }
+    ));
   }
 }

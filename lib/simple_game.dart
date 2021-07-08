@@ -20,7 +20,7 @@ class SimpleGameView extends GameView {
 
   @override
   Widget getStartPageContent(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
         child: Text('Start Game'),
         onPressed: () {
           gameEngine.state = GameState.running;
@@ -34,7 +34,7 @@ class SimpleGameView extends GameView {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Time: ${gameEngine.tickCounter}'),
-        RaisedButton(
+        ElevatedButton(
             child: Text('End Game'),
             onPressed: () {
               gameEngine.state = GameState.endOfGame;
@@ -45,7 +45,7 @@ class SimpleGameView extends GameView {
 
   @override
   Widget getEndOfGamePageContent(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
         child: Text('Do it again Sam'),
         onPressed: () {
           gameEngine.state = GameState.waitForStart;

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class Game {
@@ -21,7 +22,7 @@ abstract class GameEngine extends ChangeNotifier {
   /// Called whenever the game status changes
   void stateChanged(GameState oldState, GameState newState);
 
-  get state => _state;
+  GameState get state => _state;
 
   get tickCounter => _tickCounter;
 
@@ -44,8 +45,8 @@ abstract class GameEngine extends ChangeNotifier {
     notifyListeners();
   }
 
-  Timer _timer;
-  int _tickCounter;
+  Timer? _timer;
+  int _tickCounter = 0;
   GameState _state;
 
   GameEngine() : this._state = GameState.waitForStart;
@@ -89,9 +90,7 @@ abstract class GameView extends StatelessWidget {
     var game = Provider.of<GameEngine>(context);
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: selectGamePageContent(context, game.state),
-      ),
+      body: selectGamePageContent(context, game.state),
     );
   }
 
@@ -104,7 +103,5 @@ abstract class GameView extends StatelessWidget {
       case GameState.waitForStart:
         return getStartPageContent(context);
     }
-    assert(false, 'Unknown game state $state');
-    return getStartPageContent(context);
   }
 }
